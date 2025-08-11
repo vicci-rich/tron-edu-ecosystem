@@ -1,0 +1,137 @@
+net {
+  type = mainnet
+}
+
+storage {
+  db.version = 2
+  db.engine = "LEVELDB"
+  db.directory = "database"
+  index.directory = "index"
+}
+
+node.discovery = {
+  enable = true
+  persist = true
+  bind.ip = ""
+  external.ip = 127.0.0.1
+}
+
+node {
+  trustNode = "127.0.0.1:50051"
+  walletExtensionApi = true
+  listen.port = 16666
+  connection.timeout = 10
+  maxActiveNodes = 50
+  
+  http {
+    fullNodePort = 16667
+    solidityPort = 16668
+  }
+  
+  rpc {
+    port = 16669
+    minEffectiveConnection = 0
+  }
+}
+
+block = {
+  needSyncCheck = true
+  maintenanceTimeInterval = 21600000
+}
+
+vm = {
+  supportConstant = true
+  minTimeRatio = 0.0
+  maxTimeRatio = 5.0
+}
+
+committee = {
+  allowCreationOfContracts = 1
+}
+
+event.subscribe = {
+  native = {
+    useNativeQueue = false  # Use Kafka plugin
+    bindport = 5555
+    sendqueuelength = 1000
+  }
+  
+  # Kafka plugin path (ZIP file)
+  path = "/root/king/event-plugin/build/plugins/plugin-kafka-1.0.0.zip"
+  server = "127.0.0.1:9092"
+  dbconfig = ""
+  contractParse = true
+  
+  # Integration with both TronGrid and TronScan APIs
+  apiConfig = {
+    trongridUrl = "https://api.trongrid.io"
+    tronscanUrl = "https://apilist.tronscanapi.com"
+    enabled = true
+    timeout = 30000
+  }
+  
+  topics = [
+    {
+      triggerName = "block"
+      enable = false
+      topic = "block"
+    },
+    {
+      triggerName = "transaction"
+      enable = true
+      topic = "transaction"
+    },
+    {
+      triggerName = "contractevent"
+      enable = true
+      topic = "contractevent"
+    },
+    {
+      triggerName = "contractlog"
+      enable = true
+      topic = "contractlog"
+    },
+    {
+      triggerName = "solidity"
+      enable = false
+      topic = "solidity"
+    }
+  ]
+  
+  filter = {
+    fromblock = "latest"
+    toblock = ""
+    contractAddress = [
+      "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",  # USDT Contract
+      "TMNYJuQLooqTA5RNXaLszJ3a4WQZWUbW6R"   # Your Educational Contract
+    ]
+    contractTopic = [
+      "f0f1e23ddce8a520eaa7502e02fa767cb24152e9", # Transfer signature hash  
+      ""                                           # All other topics
+    ]
+  }
+  
+  # API endpoint configurations
+  endpoints = {
+    trongrid = {
+      wallet = "https://api.trongrid.io/wallet"
+      walletsolidity = "https://api.trongrid.io/walletsolidity"
+      v1 = "https://api.trongrid.io/v1"
+    }
+    tronscan = {
+      api = "https://apilist.tronscanapi.com/api"
+      transaction = "https://apilist.tronscanapi.com/api/transaction"
+      account = "https://apilist.tronscanapi.com/api/account"
+      contract = "https://apilist.tronscanapi.com/api/contracts"
+      token = "https://apilist.tronscanapi.com/api/token_trc20"
+    }
+  }
+}
+
+seed.node = {
+  ip.list = [
+    "3.225.171.164:18888",
+    "52.53.189.99:18888", 
+    "18.196.99.16:18888"
+  ]
+}
